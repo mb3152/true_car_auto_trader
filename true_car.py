@@ -64,19 +64,18 @@ this_df['trim'] = trims
 df = df.append(this_df,ignore_index=True)
 df.to_csv('prices&inventory.csv',index=False)
 
-
+sns.set_style('whitegrid')
 df = pd.read_csv('prices&inventory.csv')
 df.date = pd.DatetimeIndex(df.date)
 df = df.set_index('date')
-df = df.groupby([df.index.day,df.trim]).mean()
 sns.lineplot(x="date", y="truecar",hue="trim",data=df)
 plt.xticks(rotation=90)
 plt.tight_layout()
-plt.savefig('prices.pdf')
+plt.savefig('prices.png')
 plt.close()
 
 sns.lineplot(x="date", y="inventory",hue="trim",data=df)
 plt.xticks(rotation=90)
 plt.tight_layout()
-plt.savefig('inventory.pdf')
+plt.savefig('inventory.png')
 plt.close()
