@@ -12,7 +12,7 @@ def create_naked_df():
 	df.to_csv('prices&inventory.csv',index=False)
 
 
-try: df = pd.read_csv('prices&inventory.csv')
+try: df = pd.read_csv('prices_inventory.csv')
 except: create_naked_df()
 
 sport = 'https://www.truecar.com/prices-new/honda/ridgeline-summary/2021/?postalCode=19118&section=review&styleId=72032'
@@ -62,20 +62,22 @@ this_df['inventory'] = inventories
 this_df['trim'] = trims
 
 df = df.append(this_df,ignore_index=True)
-df.to_csv('prices&inventory.csv',index=False)
+df.to_csv('prices_inventory.csv',index=False)
 
+plt.close()
 sns.set_style('whitegrid')
-df = pd.read_csv('prices&inventory.csv')
+fig,axes = plt.subplots(1,2,figsize=(8,5))
+df = pd.read_csv('prices_inventory.csv')
 df.date = pd.DatetimeIndex(df.date)
 df = df.set_index('date')
-sns.lineplot(x="date", y="truecar",hue="trim",data=df)
+plt.sca(axes[0])
+ax1 = sns.lineplot(x="date", y="truecar",hue="trim",data=df)
 plt.xticks(rotation=90)
-plt.tight_layout()
-plt.savefig('prices.png')
-plt.close()
 
+ax2 = ax1.twinx()
+plt.sca(axes[1])
 sns.lineplot(x="date", y="inventory",hue="trim",data=df)
 plt.xticks(rotation=90)
 plt.tight_layout()
-plt.savefig('inventory.png')
+plt.savefig('ridgeline.png')
 plt.close()
